@@ -15,10 +15,13 @@ const productSchema = new Schema({
         required: true,
         min: 0,
     },
-    category: {
-        type: String,
+    category_id: {
+        type: Schema.Types.ObjectId,
+        ref: "Category",
         required: true,
-        enum: ["Electronics", "Clothing", "Home", "Toys", "Other"],
+    },
+    image:{
+        type: String,
     },
     stockQuantity: {
         type: Number,

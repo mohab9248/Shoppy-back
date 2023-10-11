@@ -9,6 +9,7 @@ import jwt from "jsonwebtoken";
 import morgan from "morgan";
 import ProductRoute from "./routes/ProductRoute.js";
 import orderRoute from "./routes/OrderRoute.js";
+import categoryRoute from "./routes/CategoryRoute.js"
 import cors from "cors"
 
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(cors());
 app.use("/", routerRegister);
 app.use("/", ProductRoute);
 app.use("/", orderRoute);
+app.use("/", categoryRoute);
 
 //Login and authentication
 app.post("/login", async (req, res) => {

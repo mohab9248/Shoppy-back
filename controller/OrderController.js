@@ -14,15 +14,60 @@ class orderController {
             });
     }
 
-    getAllOrder(req ,res) {
-        if(!Order){
-            res.send("not order yet")
+    async getOrderByID(req, res) {
+        const { id } = req.params;
+        const findOrder = await Order.findById(id)
+            .populate("user_id")
+            .populate("product_id");
+        try {
+            if (!findOrder) {
+                res.send({ message: " not order find " });
+            } else {
+                res.status(200).json(findOrder);
+            }
+        } catch (err) {
+            res.status(400).json(err);
+            console.log(err);
         }
-        Order.find().populate('user_id').populate('product_id').then((data)=>{
-            res.json(data)
-        }).catch((error)=>{
-            res.send(error)
-        })
+    }
+
+    getAllOrder(req, res) {
+        const order = Order.find();
+        if (!order) {
+            res.send("not order yet");
+        } else {
+            order
+                .find()
+                .populate("user_id")
+                .populate("product_id")
+                .then((data) => {
+                    res.json(data);
+                })
+                .catch((error) => {
+                    res.send(error);
+                });
+        }
+    }
+
+    async updateOrder(req, res) {
+        const { id } = req.params;
+        const data = req.body;
+        try {
+            const updatedOrder = await Order.findByIdAndUpdate(id, data);
+            res.status(200).json(updatedOrder);
+        } catch (err) {
+            res.send(err);
+        }
+    }
+
+    async deleteOrder(req, res) {
+        const { id } = req.params;
+        try {
+            const deleteData = await Order.findByIdAndDelete(id);
+            res.status(200).json(deleteData);
+        } catch (err) {
+            res.send(err);
+        }
     }
 }
 
