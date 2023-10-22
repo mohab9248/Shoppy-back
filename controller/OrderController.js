@@ -14,6 +14,23 @@ class orderController {
             });
     }
 
+    async getOrderByIDOfUser(req, res) {
+        const { id } = req.params;
+        const findOrder = await Order.find({user_id:id})
+            .populate("user_id")
+            .populate("product_id");
+        try {
+            if (!findOrder) {
+                res.send({ message: " not order find " });
+            } else {
+                res.status(200).json(findOrder);
+            }
+        } catch (err) {
+            res.status(400).json(err);
+            console.log(err);
+        }
+    }
+
     async getOrderByID(req, res) {
         const { id } = req.params;
         const findOrder = await Order.findById(id)
@@ -31,22 +48,19 @@ class orderController {
         }
     }
 
-    getAllOrder(req, res) {
-        const order = Order.find();
-        if (!order) {
-            res.send("not order yet");
-        } else {
-            order
-                .find()
-                .populate("user_id")
-                .populate("product_id")
-                .then((data) => {
-                    res.json(data);
-                })
-                .catch((error) => {
-                    res.send(error);
-                });
-        }
+    async getAllOrder(req, res) {
+        Order.find()
+            .populate("user_id")
+            .populate("product_id")
+            .then((data) => {
+                if (!data || data.length === 0) {
+                    return res.send("No orders yet");
+                }
+                res.json(data);
+            })
+            .catch((error) => {
+                res.status(500).send(error);
+            });
     }
 
     async updateOrder(req, res) {

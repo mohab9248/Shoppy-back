@@ -5,15 +5,19 @@ const orderItems = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    product_id: {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+    },
+    quantity: {
+        type: Number,
+    },
     total: {
         type: Number,
     },
-    product_id: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Product",
-        },
-    ],
+    isStatus :{
+        type :Boolean,
+    },
     createdAt: {
         type: Date,
         default: Date.now,
@@ -21,6 +25,5 @@ const orderItems = new Schema({
 });
 
 const Order = model("Order", orderItems);
-
 
 export default Order;
