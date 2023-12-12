@@ -15,8 +15,8 @@ const orderItems = new Schema({
     total: {
         type: Number,
     },
-    isStatus :{
-        type :Boolean,
+    isStatus: {
+        type: Boolean,
     },
     createdAt: {
         type: Date,

@@ -83,6 +83,22 @@ class orderController {
             res.send(err);
         }
     }
+
+
+    async getOrderByDateToday(req, res) {
+        Order.find({createdAt : Date.now()})
+            .populate("user_id")
+            .populate("product_id")
+            .then((data) => {
+                if (!data || data.length === 0) {
+                    return res.send("No orders yet");
+                }
+                res.json(data);
+            })
+            .catch((error) => {
+                res.status(500).send(error);
+            });
+    }
 }
 
 const Ordercontroller = new orderController();

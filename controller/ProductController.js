@@ -43,8 +43,7 @@ class ProductControler {
     }
 
     async searchProduct(req, res) {
-        const { searchQuery } = req.query; // Assuming the search query is sent as a query parameter
-
+        const { searchQuery } = req.query; 
         try {
             if (!searchQuery) {
                 return res
@@ -53,11 +52,9 @@ class ProductControler {
             }
 
             const products = await Product.find({
-                // Use a regular expression to perform a case-insensitive search
                 $or: [
                     { name: { $regex: new RegExp(searchQuery, "i") } },
                     { description: { $regex: new RegExp(searchQuery, "i") } },
-                    // Add more fields here if needed
                 ],
             }).populate("category_id");
 
@@ -93,33 +90,25 @@ class ProductControler {
     }
 
     async getAllProductByCategories(req, res) {
-        const categoryName = req.params.id; // Assuming categoryName is passed in the request params
+        const categoryName = req.params.id; 
 
         try {
-            // First, find the category by name
             const category = await Category.findOne({ name: categoryName });
-
             if (!category) {
                 return res.status(404).json({ message: "Category not found" });
             }
-
-            // Once you have the category, find products that belong to that category
             const products = await Product.find({
-                category_id: category._id, // Assuming category_id is the reference to the category
+                category_id: category._id,
             }).populate("category_id");
 
-            if (!products || products.length === 0) {
+            if (!products) {
                 return res
                     .status(201)
                     .json({ message: "No products in this category" });
             }
-
             res.status(200).json(products);
         } catch (err) {
-            res.status(500).json({
-                message: "Internal server error",
-                error: err,
-            });
+            res.status(500).json(err);
         }
     }
 
